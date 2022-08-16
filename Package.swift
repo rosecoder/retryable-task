@@ -3,6 +3,9 @@ import PackageDescription
 
 let package = Package(
     name: "RetryableTask",
+    platforms: [
+       .macOS("12.0"),
+    ],
     products: [
         .library(name: "RetryableTask", targets: ["RetryableTask"]),
     ],
