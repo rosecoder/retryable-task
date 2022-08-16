@@ -9,9 +9,17 @@ let package = Package(
     products: [
         .library(name: "RetryableTask", targets: ["RetryableTask"]),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.4.0"),
+        .package(url: "https://github.com/neallester/swift-log-testing.git", from: "0.0.0")
+    ],
     targets: [
-        .target(name: "RetryableTask"),
-        .testTarget(name: "RetryableTaskTests", dependencies: ["RetryableTask"]),
+        .target(name: "RetryableTask", dependencies: [
+            .product(name: "Logging", package: "swift-log"),
+        ]),
+        .testTarget(name: "RetryableTaskTests", dependencies: [
+            "RetryableTask",
+            .product(name: "SwiftLogTesting", package: "swift-log-testing"),
+        ]),
     ]
 )
