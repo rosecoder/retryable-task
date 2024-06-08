@@ -34,7 +34,10 @@ import Logging
 public func withRetryableTask<Success>(
     policy: RetryPolicy = DefaultRetryPolicy(),
     logger: Logger? = nil,
-    operation: () async throws -> Success
+    operation: () async throws -> Success,
+    file: String = #fileID,
+    function: String = #function,
+    line: UInt = #line
 ) async throws -> Success {
     var policy = policy
 
@@ -54,7 +57,7 @@ public func withRetryableTask<Success>(
             }
 
             // Log error as warning as we will do a retry
-            logger?.warning("\(error)")
+            logger?.warning("\(error)", file: file, function: function, line: line)
 
             // Inform polciy that a retry will be made
             try await policy.beforeRetry()

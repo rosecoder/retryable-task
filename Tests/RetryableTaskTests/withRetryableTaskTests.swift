@@ -7,8 +7,6 @@ private var testCancellationCallCounter = 0
 
 final class withRetryableTaskTests: XCTestCase {
 
-    private let loggingMessage = "warning TestError()|withRetryableTask.swift|doTry()"
-
     override func setUp() {
         super.setUp()
 
@@ -39,6 +37,7 @@ final class withRetryableTaskTests: XCTestCase {
     func testWithThrowingResult() async throws {
         let logger = Logger(label: "xctest:\(#function)")
         let logContainer = TestLogMessages.container(forLabel: logger.label)
+        let expectedLoggingMessage = "warning TestError()|withRetryableTaskTests.swift|testWithThrowingResult()"
 
         do {
             try await withRetryableTask(
@@ -53,14 +52,15 @@ final class withRetryableTaskTests: XCTestCase {
             }
 
             XCTAssertEqual(logContainer.messages.count, 2)
-            XCTAssertEqual(logContainer.messages[0].toString(), loggingMessage)
-            XCTAssertEqual(logContainer.messages[1].toString(), loggingMessage)
+            XCTAssertEqual(logContainer.messages[0].toString(), expectedLoggingMessage)
+            XCTAssertEqual(logContainer.messages[1].toString(), expectedLoggingMessage)
         }
     }
 
     func testWithSuccessResultAfterSingleRetry() async throws {
         let logger = Logger(label: "xctest:\(#function)")
         let logContainer = TestLogMessages.container(forLabel: logger.label)
+        let expectedLoggingMessage = "warning TestError()|withRetryableTaskTests.swift|testWithSuccessResultAfterSingleRetry()"
 
         var callCounter = 0
 
@@ -75,7 +75,7 @@ final class withRetryableTaskTests: XCTestCase {
         }
 
         XCTAssertEqual(logContainer.messages.count, 1)
-        XCTAssertEqual(logContainer.messages[0].toString(), loggingMessage)
+        XCTAssertEqual(logContainer.messages[0].toString(), expectedLoggingMessage)
         XCTAssertEqual(callCounter, 2)
     }
 
