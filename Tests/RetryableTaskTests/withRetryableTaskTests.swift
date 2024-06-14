@@ -3,8 +3,6 @@ import XCTest
 import Logging
 import SwiftLogTesting
 
-private var testCancellationCallCounter = 0
-
 final class withRetryableTaskTests: XCTestCase {
 
     override func setUp() {
@@ -80,6 +78,9 @@ final class withRetryableTaskTests: XCTestCase {
     }
 
     func testCancellation() async throws {
+
+        nonisolated(unsafe) var testCancellationCallCounter = 0
+
         let task = Task.detached {
             try await withRetryableTask(
                 policy: DelayedRetryPolicy(delay: 100_000_000, maxRetries: 100)

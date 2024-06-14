@@ -52,7 +52,7 @@ public func withRetryableTask<Success>(
         } catch {
 
             // Should we retry? If not, throw error we got
-            guard policy.shouldRetry else {
+            guard await policy.shouldRetry else {
                 throw error
             }
 

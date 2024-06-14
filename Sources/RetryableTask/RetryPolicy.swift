@@ -6,10 +6,10 @@
 /// - `DelayedRetryPolicy`
 /// - `ExponentialBackoffDelayRetryPolicy`
 /// - `NoRetryPolicy`
-public protocol RetryPolicy {
+public protocol RetryPolicy: Sendable {
 
     /// `true` if a retry should be made, else `false`. Called before every execution except the first one.
-    var shouldRetry: Bool { get }
+    var shouldRetry: Bool { mutating get async }
 
     /// Informs the policy that a retry will be made. Called before every exeyction except the first one.
     mutating func beforeRetry() async throws

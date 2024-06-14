@@ -16,10 +16,14 @@ let package = Package(
     targets: [
         .target(name: "RetryableTask", dependencies: [
             .product(name: "Logging", package: "swift-log"),
+        ], swiftSettings: [
+            .enableExperimentalFeature("StrictConcurrency")
         ]),
         .testTarget(name: "RetryableTaskTests", dependencies: [
             "RetryableTask",
             .product(name: "SwiftLogTesting", package: "swift-log-testing"),
+        ], swiftSettings: [
+            .enableExperimentalFeature("StrictConcurrency")
         ]),
     ]
 )
