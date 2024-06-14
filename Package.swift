@@ -1,4 +1,4 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 6.0
 import PackageDescription
 
 let package = Package(
@@ -17,13 +17,13 @@ let package = Package(
         .target(name: "RetryableTask", dependencies: [
             .product(name: "Logging", package: "swift-log"),
         ], swiftSettings: [
-            .enableExperimentalFeature("StrictConcurrency")
+            .swiftLanguageVersion(.v6),
         ]),
         .testTarget(name: "RetryableTaskTests", dependencies: [
             "RetryableTask",
             .product(name: "SwiftLogTesting", package: "swift-log-testing"),
         ], swiftSettings: [
-            .enableExperimentalFeature("StrictConcurrency")
+            .swiftLanguageVersion(.v6),
         ]),
     ]
 )
