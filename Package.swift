@@ -11,7 +11,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-log.git", from: "1.4.0"),
-        .package(url: "https://github.com/neallester/swift-log-testing.git", from: "0.0.0")
+        .package(url: "https://github.com/neallester/swift-log-testing.git", from: "0.0.0"),
     ],
     targets: [
         .target(name: "RetryableTask", dependencies: [

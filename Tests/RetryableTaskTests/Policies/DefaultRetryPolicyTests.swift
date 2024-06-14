@@ -1,17 +1,17 @@
-import XCTest
+import Testing
 @testable import RetryableTask
 
-final class DefaultRetryPolicyTests: XCTestCase {
+@Suite(.serialized)
+struct DefaultRetryPolicyTests {
 
-    func testChangeDefault() async throws {
+    @Test func changeDefault() async throws {
 
         // Change to policy: No retry
         do {
             await DefaultRetryPolicyConfiguration.shared.use(retryPolicy: NoRetryPolicy())
 
             var policy = DefaultRetryPolicy()
-            let shouldRetry = await policy.shouldRetry
-            XCTAssertFalse(shouldRetry)
+            #expect(!(await policy.shouldRetry))
         }
 
         // Change to policy: Immediate retry with single retry
@@ -19,12 +19,10 @@ final class DefaultRetryPolicyTests: XCTestCase {
             await DefaultRetryPolicyConfiguration.shared.use(retryPolicy: ImmediateRetryPolicy(maxRetries: 1))
 
             var policy = DefaultRetryPolicy()
-            var shouldRetry = await policy.shouldRetry
-            XCTAssertTrue(shouldRetry)
+            #expect(await policy.shouldRetry)
 
             try await policy.beforeRetry()
-            shouldRetry = await policy.shouldRetry
-            XCTAssertFalse(shouldRetry)
+            #expect(!(await policy.shouldRetry))
         }
     }
 }

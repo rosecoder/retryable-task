@@ -1,29 +1,29 @@
-import XCTest
+import Testing
 @testable import RetryableTask
 
-final class ImmediateRetryPolicyTests: XCTestCase {
-    
-    func testSingleRetry() throws {
+@Suite struct ImmediateRetryPolicyTests {
+
+    @Test func singleRetry() throws {
         var policy = ImmediateRetryPolicy(maxRetries: 1)
-        XCTAssertTrue(policy.shouldRetry)
+        #expect(policy.shouldRetry)
 
         policy.beforeRetry()
-        XCTAssertFalse(policy.shouldRetry)
+        #expect(!policy.shouldRetry)
     }
 
-    func testDualRetry() throws {
+    @Test func dualRetry() throws {
         var policy = ImmediateRetryPolicy(maxRetries: 2)
-        XCTAssertTrue(policy.shouldRetry)
+        #expect(policy.shouldRetry)
 
         policy.beforeRetry()
-        XCTAssertTrue(policy.shouldRetry)
+        #expect(policy.shouldRetry)
 
         policy.beforeRetry()
-        XCTAssertFalse(policy.shouldRetry)
+        #expect(!policy.shouldRetry)
     }
 
-    func testNoRetry() throws {
+    @Test func noRetry() throws {
         let policy = ImmediateRetryPolicy(maxRetries: 0)
-        XCTAssertFalse(policy.shouldRetry)
+        #expect(!policy.shouldRetry)
     }
 }

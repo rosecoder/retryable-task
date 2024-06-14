@@ -1,13 +1,11 @@
-import XCTest
+import Testing
 @testable import RetryableTask
 import Logging
 import SwiftLogTesting
 
-final class withRetryableTaskTests: XCTestCase {
+@Suite struct withRetryableTaskTests {
 
-    override func setUp() {
-        super.setUp()
-
+    init() {
         TestLogMessages.bootstrap()
     }
 
@@ -15,8 +13,8 @@ final class withRetryableTaskTests: XCTestCase {
 
     // MARK: -
 
-    func testWithSuccessResult() async throws {
-        let logger = Logger(label: "xctest:\(#function)")
+    @Test func withSuccessResult() async throws {
+        let logger = Logger(label: "testing:\(#function)")
         let logContainer = TestLogMessages.container(forLabel: logger.label)
 
         var callCounter = 0
@@ -28,14 +26,14 @@ final class withRetryableTaskTests: XCTestCase {
             callCounter += 1
         }
 
-        XCTAssertTrue(logContainer.messages.isEmpty)
-        XCTAssertEqual(callCounter, 1)
+        #expect(logContainer.messages.isEmpty)
+        #expect(callCounter == 1)
     }
 
-    func testWithThrowingResult() async throws {
-        let logger = Logger(label: "xctest:\(#function)")
+    @Test func withThrowingResult() async throws {
+        let logger = Logger(label: "testing:\(#function)")
         let logContainer = TestLogMessages.container(forLabel: logger.label)
-        let expectedLoggingMessage = "warning TestError()|withRetryableTaskTests.swift|testWithThrowingResult()"
+        let expectedLoggingMessage = "warning TestError()|withRetryableTaskTests.swift|withThrowingResult()"
 
         do {
             try await withRetryableTask(
@@ -49,16 +47,16 @@ final class withRetryableTaskTests: XCTestCase {
                 throw error
             }
 
-            XCTAssertEqual(logContainer.messages.count, 2)
-            XCTAssertEqual(logContainer.messages[0].toString(), expectedLoggingMessage)
-            XCTAssertEqual(logContainer.messages[1].toString(), expectedLoggingMessage)
+            #expect(logContainer.messages.count == 2)
+            #expect(logContainer.messages[0].toString() == expectedLoggingMessage)
+            #expect(logContainer.messages[1].toString() == expectedLoggingMessage)
         }
     }
 
-    func testWithSuccessResultAfterSingleRetry() async throws {
-        let logger = Logger(label: "xctest:\(#function)")
+    @Test func withSuccessResultAfterSingleRetry() async throws {
+        let logger = Logger(label: "testing:\(#function)")
         let logContainer = TestLogMessages.container(forLabel: logger.label)
-        let expectedLoggingMessage = "warning TestError()|withRetryableTaskTests.swift|testWithSuccessResultAfterSingleRetry()"
+        let expectedLoggingMessage = "warning TestError()|withRetryableTaskTests.swift|withSuccessResultAfterSingleRetry()"
 
         var callCounter = 0
 
@@ -72,12 +70,12 @@ final class withRetryableTaskTests: XCTestCase {
             }
         }
 
-        XCTAssertEqual(logContainer.messages.count, 1)
-        XCTAssertEqual(logContainer.messages[0].toString(), expectedLoggingMessage)
-        XCTAssertEqual(callCounter, 2)
+        #expect(logContainer.messages.count == 1)
+        #expect(logContainer.messages[0].toString() == expectedLoggingMessage)
+        #expect(callCounter == 2)
     }
 
-    func testCancellation() async throws {
+    @Test func cancellation() async throws {
 
         nonisolated(unsafe) var testCancellationCallCounter = 0
 
@@ -92,9 +90,9 @@ final class withRetryableTaskTests: XCTestCase {
 
         try await Task.sleep(nanoseconds: 1_000_000_000)
 
-        XCTAssertFalse(task.isCancelled)
+        #expect(!task.isCancelled)
         task.cancel()
-        XCTAssertTrue(task.isCancelled)
+        #expect(task.isCancelled)
 
         do {
             try await task.value
@@ -104,6 +102,6 @@ final class withRetryableTaskTests: XCTestCase {
             }
         }
 
-        XCTAssertEqual(testCancellationCallCounter, 10, accuracy: 1)
+        #expect(abs(testCancellationCallCounter - 10) <= 1)
     }
 }

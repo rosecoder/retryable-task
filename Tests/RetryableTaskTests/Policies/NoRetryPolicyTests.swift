@@ -1,11 +1,11 @@
-import XCTest
+import Testing
 @testable import RetryableTask
 
-final class NoRetryPolicyTests: XCTestCase {
+@Suite struct NoRetryPolicyTests {
 
-    func testNoRetry() throws {
+    @Test func noRetry() throws {
         let policy = NoRetryPolicy()
-        XCTAssertFalse(policy.shouldRetry)
+        #expect(!policy.shouldRetry)
 
         policy.beforeRetry() // Should do nothing
     }
