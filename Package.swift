@@ -17,7 +17,8 @@ let package = Package(
         .target(name: "RetryableTask", dependencies: [
             .product(name: "Logging", package: "swift-log"),
         ], swiftSettings: [
-            .enableExperimentalFeature("StrictConcurrency")
+            .enableExperimentalFeature("StrictConcurrency"),
+            .enableExperimentalFeature("IsolatedAny"),
         ]),
         .testTarget(name: "RetryableTaskTests", dependencies: [
             "RetryableTask",

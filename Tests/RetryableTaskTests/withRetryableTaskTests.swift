@@ -19,7 +19,7 @@ final class withRetryableTaskTests: XCTestCase {
         let logger = Logger(label: "xctest:\(#function)")
         let logContainer = TestLogMessages.container(forLabel: logger.label)
 
-        var callCounter = 0
+        nonisolated(unsafe) var callCounter = 0
 
         try await withRetryableTask(
             policy: ImmediateRetryPolicy(maxRetries: 1),
@@ -60,7 +60,7 @@ final class withRetryableTaskTests: XCTestCase {
         let logContainer = TestLogMessages.container(forLabel: logger.label)
         let expectedLoggingMessage = "warning TestError()|withRetryableTaskTests.swift|testWithSuccessResultAfterSingleRetry()"
 
-        var callCounter = 0
+        nonisolated(unsafe) var callCounter = 0
 
         try await withRetryableTask(
             policy: ImmediateRetryPolicy(maxRetries: 1),

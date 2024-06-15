@@ -31,10 +31,10 @@ import Logging
 /// - Returns: Return element of the operation-parameter.
 ///
 /// - SeeAlso: `DefaultRetryPolicy()`
-public func withRetryableTask<Success>(
+public func withRetryableTask<Success: Sendable>(
     policy: RetryPolicy = DefaultRetryPolicy(),
     logger: Logger? = nil,
-    operation: () async throws -> Success,
+    operation: @isolated(any) () async throws -> Success,
     file: String = #fileID,
     function: String = #function,
     line: UInt = #line
