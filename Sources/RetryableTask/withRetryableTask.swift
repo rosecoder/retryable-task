@@ -1,5 +1,11 @@
 import Logging
 
+#if swift(>=6.0)
+public typealias Operation<Success: Sendable> = @isolated(any) () async throws -> Success
+#else
+public typealias Operation<Success: Sendable> = () async throws -> Success
+#endif
+
 /// Executes given operation with possible retries depending on given `RetryPolicy`.
 ///
 /// Example usage:
@@ -34,7 +40,7 @@ import Logging
 public func withRetryableTask<Success: Sendable>(
     policy: RetryPolicy = DefaultRetryPolicy(),
     logger: Logger? = nil,
-    operation: @isolated(any) () async throws -> Success,
+    operation: Operation<Success>,
     file: String = #fileID,
     function: String = #function,
     line: UInt = #line
